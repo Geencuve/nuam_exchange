@@ -1,0 +1,62 @@
+{% extends "appNuam/base.html" %}
+
+{% block title %}Reglas | NUAM Exchange{% endblock %}
+{% block page_title %}Reglas de Conversión{% endblock %}
+
+{% block content %}
+<div class="table-container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="mb-0">Listado de reglas de conversión</h5>
+        <a href="{% url 'regla_form' %}" class="btn" style="background-color: #ff6600; border-color: #ff6600; color: white;">
+            Nueva regla
+        </a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>País</th>
+                    <th>Normativa</th>
+                    <th>Nombre regla</th>
+                    <th>Prioridad</th>
+                    <th>Activa</th>
+                    <th>Creado por</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for regla in reglas %}
+                <tr>
+                    <td>{{ regla.id }}</td>
+                    <td>{{ regla.pais.nombre }}</td>
+                    <td>{{ regla.normativa.nombre_normativa }}</td>
+                    <td>{{ regla.nombre_regla }}</td>
+                    <td>{{ regla.prioridad }}</td>
+                    <td>
+                        {% if regla.activa %}
+                            <span class="badge bg-success">Sí</span>
+                        {% else %}
+                            <span class="badge bg-secondary">No</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if regla.creado_por %}
+                            {{ regla.creado_por.username }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="text-center text-muted">
+                        No hay reglas de conversión registradas.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

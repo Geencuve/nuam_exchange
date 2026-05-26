@@ -1,0 +1,66 @@
+{% extends "appNuam/base.html" %}
+
+{% block title %}Factores | NUAM Exchange{% endblock %}
+{% block page_title %}Factores Tributarios{% endblock %}
+
+{% block content %}
+<div class="table-container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="mb-0">Listado de factores tributarios</h5>
+        <a href="{% url 'factores_form' %}" class="btn" style="background-color: #ff6600; border-color: #ff6600; color: white;">
+            Nuevo factor
+        </a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered align-middle">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>País</th>
+                    <th>Normativa</th>
+                    <th>Nombre factor</th>
+                    <th>Valor</th>
+                    <th>Fecha inicio</th>
+                    <th>Fecha fin</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for factor in factores %}
+                <tr>
+                    <td>{{ factor.id }}</td>
+                    <td>{{ factor.pais.nombre }}</td>
+                    <td>{{ factor.normativa.nombre_normativa }}</td>
+                    <td>{{ factor.nombre_factor }}</td>
+                    <td>{{ factor.valor_factor }}</td>
+                    <td>{{ factor.fecha_inicio|date:"Y-m-d" }}</td>
+                    <td>
+                        {% if factor.fecha_fin %}
+                            {{ factor.fecha_fin|date:"Y-m-d" }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if factor.estado == 'VIGENTE' %}
+                            <span class="badge bg-success">Vigente</span>
+                        {% elif factor.estado == 'INACTIVO' %}
+                            <span class="badge bg-secondary">Inactivo</span>
+                        {% else %}
+                            <span class="badge bg-light text-dark">{{ factor.estado }}</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="8" class="text-center text-muted">
+                        No hay factores tributarios registrados.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

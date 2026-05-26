@@ -1,0 +1,85 @@
+{% extends "appNuam/base.html" %}
+
+{% block title %}Formulario País | NUAM Exchange{% endblock %}
+{% block page_title %}Formulario de País{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="table-container">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <h5 class="mb-1">Registrar / Editar país</h5>
+                    <p class="text-muted mb-0">
+                        Complete la información del país para su uso en normativas, factores y procesos tributarios.
+                    </p>
+                </div>
+                <a href="{% url 'paises_lista' %}" class="btn btn-outline-secondary">
+                    Volver al listado
+                </a>
+            </div>
+
+            <form method="post">
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label for="{{ form.nombre.id_for_label }}" class="form-label">
+                            Nombre del país
+                        </label>
+                        {{ form.nombre }}
+                        {% if form.nombre.errors %}
+                            <div class="text-danger small mt-1">
+                                {{ form.nombre.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="{{ form.codigo_iso.id_for_label }}" class="form-label">
+                            Código ISO
+                        </label>
+                        {{ form.codigo_iso }}
+                        {% if form.codigo_iso.errors %}
+                            <div class="text-danger small mt-1">
+                                {{ form.codigo_iso.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="form-check mt-2">
+                            {{ form.activo }}
+                            <label for="{{ form.activo.id_for_label }}" class="form-check-label">
+                                País activo
+                            </label>
+                        </div>
+                        {% if form.activo.errors %}
+                            <div class="text-danger small mt-1">
+                                {{ form.activo.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <hr class="my-4">
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn" style="background-color: #ff6600; border-color: #ff6600; color: white;">
+                        Guardar país
+                    </button>
+                    <a href="{% url 'paises_lista' %}" class="btn btn-secondary">
+                        Cancelar
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

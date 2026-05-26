@@ -1,0 +1,50 @@
+{% extends 'appNuam/base.html' %}
+
+{% block title %}Documentos PDF{% endblock %}
+{% block pagetitle %}Documentos PDF{% endblock %}
+
+{% block content %}
+<div class="table-container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="mb-0">Listado de documentos PDF</h5>
+        <a href="{% url 'documento_pdf_form' %}" class="btn" style="background-color:#ff6600;border-color:#ff6600;color:white;">
+            Nuevo PDF
+        </a>
+    </div>
+
+    <table class="table table-striped align-middle">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Archivo</th>
+                <th>Usuario</th>
+                <th>País</th>
+                <th>Estado</th>
+                <th>Fecha subida</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for documento in documentos %}
+            <tr>
+                <td>{{ documento.id }}</td>
+                <td>
+                    <a href="{{ documento.archivo.url }}" target="_blank">{{ documento.nombre_archivo }}</a>
+                </td>
+                <td>{{ documento.usuario.username }}</td>
+                <td>{{ documento.pais.nombre }}</td>
+                <td>{{ documento.estado }}</td>
+                <td>{{ documento.fecha_subida }}</td>
+                <td>
+                   
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7" class="text-center text-muted">No hay documentos cargados.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

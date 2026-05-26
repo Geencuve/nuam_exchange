@@ -1,0 +1,72 @@
+{% extends "appNuam/base.html" %}
+
+{% block title %}Auditoría | NUAM Exchange{% endblock %}
+{% block page_title %}Auditoría de Cambios{% endblock %}
+
+{% block content %}
+<div class="table-container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="mb-0">Historial de auditoría</h5>
+        <a href="{% url 'auditoria_exportar' %}" class="btn btn-outline" style="border-color: #ff6600; color: #ff6600;">
+            Exportar
+        </a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered align-middle">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Tabla afectada</th>
+                    <th>Registro ID</th>
+                    <th>Usuario</th>
+                    <th>Acción</th>
+                    <th>IP origen</th>
+                    <th>Fecha evento</th>
+                    <th>Observación</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for auditoria in auditorias %}
+                <tr>
+                    <td>{{ auditoria.id }}</td>
+                    <td>{{ auditoria.tabla_afectada }}</td>
+                    <td>{{ auditoria.registro_id }}</td>
+                    <td>
+                        {% if auditoria.usuario %}
+                            {{ auditoria.usuario.username }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if auditoria.accion == 'UPDATE' %}
+                            <span class="badge bg-primary">UPDATE</span>
+                        {% elif auditoria.accion == 'CREATE' %}
+                            <span class="badge bg-success">CREATE</span>
+                        {% elif auditoria.accion == 'DELETE' %}
+                            <span class="badge bg-danger">DELETE</span>
+                        {% elif auditoria.accion == 'LOGIN' %}
+                            <span class="badge bg-info text-dark">LOGIN</span>
+                        {% elif auditoria.accion == 'LOGOUT' %}
+                            <span class="badge bg-secondary">LOGOUT</span>
+                        {% else %}
+                            <span class="badge bg-light text-dark">{{ auditoria.accion }}</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ auditoria.ip_origen|default:"-" }}</td>
+                    <td>{{ auditoria.fecha_evento|date:"Y-m-d H:i" }}</td>
+                    <td>{{ auditoria.observacion|default:"-" }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="8" class="text-center text-muted">
+                        No hay registros de auditoría.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

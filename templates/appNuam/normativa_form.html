@@ -1,0 +1,83 @@
+{% extends "appNuam/base.html" %}
+
+{% block title %}Formulario Normativas | NUAM Exchange{% endblock %}
+{% block page_title %}Formulario de normativas{% endblock %}
+
+{% block content %}
+<div class="table-container">
+    <h5 class="mb-3">Registrar / Editar normativa</h5>
+
+    <form method="post">
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label for="{{ form.pais.id_for_label }}" class="form-label">País</label>
+                {{ form.pais }}
+                {% if form.pais.errors %}
+                    <div class="text-danger small mt-1">{{ form.pais.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="col-md-6">
+                <label for="{{ form.nombre_normativa.id_for_label }}" class="form-label">Normativa</label>
+                {{ form.nombre_normativa }}
+                {% if form.nombre_normativa.errors %}
+                    <div class="text-danger small mt-1">{{ form.nombre_normativa.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="col-md-6">
+                <label for="{{ form.version_normativa.id_for_label }}" class="form-label">Versión</label>
+                {{ form.version_normativa }}
+                {% if form.version_normativa.errors %}
+                    <div class="text-danger small mt-1">{{ form.version_normativa.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="col-md-6">
+                <label for="{{ form.vigente_desde.id_for_label }}" class="form-label">Vigente desde</label>
+                {{ form.vigente_desde }}
+                {% if form.vigente_desde.errors %}
+                    <div class="text-danger small mt-1">{{ form.vigente_desde.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="col-md-6">
+                <label for="{{ form.vigente_hasta.id_for_label }}" class="form-label">Vigente hasta</label>
+                {{ form.vigente_hasta }}
+                {% if form.vigente_hasta.errors %}
+                    <div class="text-danger small mt-1">{{ form.vigente_hasta.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="col-md-6">
+                <label for="{{ form.estado.id_for_label }}" class="form-label">Estado</label>
+                {{ form.estado }}
+                {% if form.estado.errors %}
+                    <div class="text-danger small mt-1">{{ form.estado.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="col-md-12">
+                <label for="{{ form.descripcion.id_for_label }}" class="form-label">Descripción</label>
+                {{ form.descripcion }}
+                {% if form.descripcion.errors %}
+                    <div class="text-danger small mt-1">{{ form.descripcion.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <button type="submit" class="btn" style="background-color: #ff6600; border-color: #ff6600; color: white;">Guardar</button>
+            <a href="{% url 'normativas_lista' %}" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

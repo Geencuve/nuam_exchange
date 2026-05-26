@@ -1,0 +1,125 @@
+{% extends "appNuam/base.html" %}
+
+{% block title %}Formulario archivos de carga | NUAM Exchange{% endblock %}
+{% block page_title %}Formulario de archivos de carga{% endblock %}
+
+{% block content %}
+<div class="table-container">
+    <h5 class="mb-3">Registrar / Editar archivo de carga</h5>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label">Archivo</label>
+                {{ form.archivo }}
+                {% if form.archivo.errors %}
+                    <div class="text-danger small">{{ form.archivo.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Usuario</label>
+                {{ form.usuario }}
+                {% if form.usuario.errors %}
+                    <div class="text-danger small">{{ form.usuario.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">País</label>
+                {{ form.pais }}
+                {% if form.pais.errors %}
+                    <div class="text-danger small">{{ form.pais.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Nombre archivo</label>
+                {{ form.nombre_archivo }}
+                {% if form.nombre_archivo.errors %}
+                    <div class="text-danger small">{{ form.nombre_archivo.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Ruta archivo</label>
+                {{ form.ruta_archivo }}
+                {% if form.ruta_archivo.errors %}
+                    <div class="text-danger small">{{ form.ruta_archivo.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Tipo archivo</label>
+                {{ form.tipo_archivo }}
+                {% if form.tipo_archivo.errors %}
+                    <div class="text-danger small">{{ form.tipo_archivo.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label">Total registros</label>
+                {{ form.total_registros }}
+                {% if form.total_registros.errors %}
+                    <div class="text-danger small">{{ form.total_registros.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label">Registros OK</label>
+                {{ form.registros_ok }}
+                {% if form.registros_ok.errors %}
+                    <div class="text-danger small">{{ form.registros_ok.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label">Registros error</label>
+                {{ form.registros_error }}
+                {% if form.registros_error.errors %}
+                    <div class="text-danger small">{{ form.registros_error.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Estado proceso</label>
+                {{ form.estado_proceso }}
+                {% if form.estado_proceso.errors %}
+                    <div class="text-danger small">{{ form.estado_proceso.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Fecha procesamiento</label>
+                {{ form.fecha_procesamiento }}
+                {% if form.fecha_procesamiento.errors %}
+                    <div class="text-danger small">{{ form.fecha_procesamiento.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="col-md-12">
+                <label class="form-label">Observaciones</label>
+                {{ form.observaciones }}
+                {% if form.observaciones.errors %}
+                    <div class="text-danger small">{{ form.observaciones.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="col-md-12 mt-4">
+            <button type="submit" class="btn" style="background-color: #ff6600; border-color: #ff6600; color: white;">
+                Guardar
+            </button>
+            <a href="{% url 'archivos_carga_lista' %}" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

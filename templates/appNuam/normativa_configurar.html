@@ -1,0 +1,258 @@
+{% extends "appNuam/base.html" %}
+
+{% block title %}Configurar Normativa | NUAM Exchange{% endblock %}
+{% block page_title %}Configurar Normativa{% endblock %}
+
+{% block content %}
+<div class="table-container mb-4">
+    <div class="d-flex justify-content-between align-items-start flex-wrap gap-3">
+        <div>
+            <h4 class="mb-1">{{ normativa.nombre_normativa }}</h4>
+            <p class="text-muted mb-1">
+                País: {{ normativa.pais.nombre }} | Versión: {{ normativa.version_normativa }}
+            </p>
+            <p class="text-muted mb-0">
+                Vigencia: {{ normativa.vigente_desde|date:"Y-m-d" }}
+                {% if normativa.vigente_hasta %}
+                    al {{ normativa.vigente_hasta|date:"Y-m-d" }}
+                {% else %}
+                    en adelante
+                {% endif %}
+            </p>
+        </div>
+
+        <div>
+            {% if normativa.estado == 'VIGENTE' %}
+                <span class="badge bg-success">Vigente</span>
+            {% elif normativa.estado == 'BORRADOR' %}
+                <span class="badge bg-warning text-dark">Borrador</span>
+            {% else %}
+                <span class="badge bg-secondary">Inactiva</span>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if normativa.descripcion %}
+    <hr>
+    <p class="mb-0">{{ normativa.descripcion }}</p>
+    {% endif %}
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-6">
+        <div class="table-container h-100">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="mb-0">Factores tributarios</h5>
+                <a href="{% url 'factores_form' %}?normativa_id={{ normativa.id }}" class="btn btn-sm"
+                   style="background-color: #ff6600; border-color: #ff6600; color: white;">
+                    Nuevo factor
+                </a>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-sm table-striped align-middle">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Valor</th>
+                            <th>Inicio</th>
+                            <th>Fin</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for factor in factores %}
+                        <tr>
+                            <td>{{ factor.nombre_factor }}</td>
+                            <td>{{ factor.valor_factor }}</td>
+                            <td>{{ factor.fecha_inicio|date:"Y-m-d" }}</td>
+                            <td>
+                                {% if factor.fecha_fin %}
+                                    {{ factor.fecha_fin|date:"Y-m-d" }}
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if factor.estado == 'VIGENTE' %}
+                                    <span class="badge bg-success">Vigente</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">{{ factor.estado }}</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center text-muted">
+                                No hay factores registrados para esta normativa.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="table-container h-100">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="mb-0">Reglas de conversión</h5>
+                <a href="{% url 'regla_form' %}?normativa_id={{ normativa.id }}" class="btn btn-sm"
+                   style="background-color: #ff6600; border-color: #ff6600; color: white;">
+                    Nueva regla
+                </a>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-sm table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th>Regla</th>
+                            <th>Prioridad</th>
+                            <th>Activa</th>
+                            <th>Fórmula</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for regla in reglas %}
+                        <tr>
+                            <td>
+                                <strong>{{ regla.nombre_regla }}</strong><br>
+                                <small class="text-muted">{{ regla.descripcion|default:"Sin descripción" }}</small>
+                            </td>
+                            <td>{{ regla.prioridad }}</td>
+                            <td>
+                                {% if regla.activa %}
+                                    <span class="badge bg-success">Sí</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">No</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <small>{{ regla.formula_aplicable|default:"-" }}</small>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-center text-muted">
+                                No hay reglas registradas para esta normativa.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mt-1">
+    <div class="col-lg-4">
+        <div class="table-container h-100">
+            <h5 class="mb-3">Motor de cálculo</h5>
+            <p class="text-muted mb-3">
+                El motor actual de esta normativa se construye con factores tributarios y reglas de conversión.
+            </p>
+
+            <ul class="list-group list-group-flush mb-3">
+                <li class="list-group-item d-flex justify-content-between px-0">
+                    <span>Factores registrados</span>
+                    <strong>{{ total_factores }}</strong>
+                </li>
+                <li class="list-group-item d-flex justify-content-between px-0">
+                    <span>Factores vigentes</span>
+                    <strong>{{ factores_vigentes }}</strong>
+                </li>
+                <li class="list-group-item d-flex justify-content-between px-0">
+                    <span>Reglas activas</span>
+                    <strong>{{ reglas_activas }}</strong>
+                </li>
+            </ul>
+
+            <div class="d-flex gap-2">
+                <a href="{% url 'factores_form' %}?normativa_id={{ normativa.id }}" class="btn btn-sm"
+                   style="background-color: #ff6600; border-color: #ff6600; color: white;">
+                    Nuevo factor
+                </a>
+                <a href="{% url 'regla_form' %}?normativa_id={{ normativa.id }}" class="btn btn-sm btn-outline-secondary">
+                    Nueva regla
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="table-container h-100">
+            <h5 class="mb-3">Validaciones y topes</h5>
+            <p class="text-muted mb-3">
+                Estado de consistencia de la parametrización actual de la normativa.
+            </p>
+
+            <ul class="list-group list-group-flush mb-3">
+                <li class="list-group-item d-flex justify-content-between px-0">
+                    <span>Total de reglas</span>
+                    <strong>{{ total_reglas }}</strong>
+                </li>
+                <li class="list-group-item d-flex justify-content-between px-0">
+                    <span>Reglas activas</span>
+                    <strong>{{ reglas_activas }}</strong>
+                </li>
+                <li class="list-group-item d-flex justify-content-between px-0">
+                    <span>Reglas sin fórmula</span>
+                    <strong>{{ reglas_sin_formula }}</strong>
+                </li>
+            </ul>
+
+            {% if reglas_sin_formula > 0 %}
+                <div class="alert alert-warning mb-0">
+                    Hay reglas pendientes de completar antes de dejar la normativa totalmente operativa.
+                </div>
+            {% else %}
+                <div class="alert alert-success mb-0">
+                    La configuración base de reglas está completa.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="table-container h-100">
+            <h5 class="mb-3">Obligaciones y exportación</h5>
+            <p class="text-muted mb-3">
+                Seguimiento operativo de resultados generados para esta normativa.
+            </p>
+
+            <ul class="list-group list-group-flush mb-3">
+                <li class="list-group-item d-flex justify-content-between px-0">
+                    <span>Calificaciones generadas</span>
+                    <strong>{{ total_calificaciones }}</strong>
+                </li>
+                <li class="list-group-item d-flex justify-content-between px-0">
+                    <span>País asociado</span>
+                    <strong>{{ normativa.pais.nombre }}</strong>
+                </li>
+                <li class="list-group-item d-flex justify-content-between px-0">
+                    <span>Estado normativa</span>
+                    <strong>{{ normativa.estado }}</strong>
+                </li>
+            </ul>
+
+            <div class="d-flex gap-2">
+                <a href="{% url 'calificaciones_lista' %}" class="btn btn-sm btn-outline-secondary">
+                    Ver calificaciones
+                </a>
+                <a href="{% url 'archivo_carga_form' %}" class="btn btn-sm"
+                   style="background-color: #ff6600; border-color: #ff6600; color: white;">
+                    Nueva carga
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-4 d-flex gap-2">
+    <a href="{% url 'normativas_lista' %}" class="btn btn-secondary">Volver</a>
+    <a href="{% url 'normativa_form' %}" class="btn btn-outline-secondary">Nueva normativa</a>
+</div>
+{% endblock %}

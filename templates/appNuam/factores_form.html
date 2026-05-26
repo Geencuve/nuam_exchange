@@ -1,0 +1,110 @@
+{% extends "appNuam/base.html" %}
+
+{% block title %}Formulario Factores | NUAM Exchange{% endblock %}
+{% block page_title %}Formulario de factores{% endblock %}
+
+{% block content %}
+<div class="table-container">
+    <h5 class="mb-3">Registrar / Editar factor</h5>
+
+    {% if normativa %}
+        <div class="alert alert-light border">
+            <strong>Normativa:</strong> {{ normativa.nombre_normativa }} |
+            <strong>País:</strong> {{ normativa.pais.nombre }} |
+            <strong>Versión:</strong> {{ normativa.version_normativa }}
+        </div>
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+
+        {% if normativa %}
+            <input type="hidden" name="normativa_id" value="{{ normativa.id }}">
+        {% endif %}
+
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label">País</label>
+                {{ form.pais }}
+                {% if form.pais.errors %}
+                    <div class="text-danger small">{{ form.pais.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Normativa</label>
+                {{ form.normativa }}
+                {% if form.normativa.errors %}
+                    <div class="text-danger small">{{ form.normativa.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Nombre factor</label>
+                {{ form.nombre_factor }}
+                {% if form.nombre_factor.errors %}
+                    <div class="text-danger small">{{ form.nombref_actor.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Valor</label>
+                {{ form.valor_factor }}
+                {% if form.valor_factor.errors %}
+                    <div class="text-danger small">{{ form.valor_factor.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Fecha inicio</label>
+                {{ form.fecha_inicio }}
+                {% if form.fecha_inicio.errors %}
+                    <div class="text-danger small">{{ form.fecha_inicio.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Fecha fin</label>
+                {{ form.fecha_fin }}
+                {% if form.fecha_fin.errors %}
+                    <div class="text-danger small">{{ form.fecha_fin.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Estado</label>
+                {{ form.estado }}
+                {% if form.estado.errors %}
+                    <div class="text-danger small">{{ form.estado.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Creado por</label>
+                {{ form.creado_por }}
+                {% if form.creado_por.errors %}
+                    <div class="text-danger small">{{ form.creado_por.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <button type="submit" class="btn" style="background-color: #ff6600; border-color: #ff6600; color: white;">
+                Guardar
+            </button>
+
+            {% if normativa %}
+                <a href="{% url 'normativa_configurar' normativa.id %}" class="btn btn-secondary">Cancelar</a>
+            {% else %}
+                <a href="{% url 'factores_lista' %}" class="btn btn-secondary">Cancelar</a>
+            {% endif %}
+        </div>
+    </form>
+</div>
+{% endblock %}

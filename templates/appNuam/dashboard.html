@@ -1,0 +1,118 @@
+{% extends "appNuam/base.html" %}
+
+{% block title %}Dashboard | NUAM Exchange{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="row g-4 mb-4">
+    <div class="col-md-3">
+        <div class="card card-kpi p-3">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="text-muted">Usuarios activos</h6>
+                    <h2>{{ usuarios_activos }}</h2>
+                    <small class="text-orange">+{{ usuarios_nuevos_semana }} esta semana</small>
+                </div>
+                <i class="fas fa-users fa-2x text-orange"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card card-kpi p-3">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="text-muted">Archivos procesados</h6>
+                    <h2>{{ archivos_procesados_mes }}</h2>
+                    <small class="text-orange">Últimos 30 días</small>
+                </div>
+                <i class="fas fa-file-upload fa-2x text-orange"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card card-kpi p-3">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="text-muted">Calificaciones vigentes</h6>
+                    <h2>{{ calificaciones_vigentes }}</h2>
+                    <small class="text-orange">Base actual</small>
+                </div>
+                <i class="fas fa-star fa-2x text-orange"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card card-kpi p-3">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h6 class="text-muted">Eventos auditados</h6>
+                    <h2>{{ eventos_auditados }}</h2>
+                    <small class="text-orange">Trazabilidad completa</small>
+                </div>
+                <i class="fas fa-search fa-2x text-orange"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="table-container">
+            <h5 class="mb-3">Resumen operativo</h5>
+            <table class="table table-striped align-middle">
+                <thead>
+                    <tr>
+                        <th>Módulo</th>
+                        <th>Estado</th>
+                        <th>Última actividad</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in resumen_operativo %}
+                    <tr>
+                        <td>{{ item.modulo }}</td>
+                        <td>
+                            {% if item.badge == 'success' %}
+                                <span class="badge bg-success">{{ item.estado }}</span>
+                            {% elif item.badge == 'warning' %}
+                                <span class="badge bg-warning text-dark">{{ item.estado }}</span>
+                            {% elif item.badge == 'danger' %}
+                                <span class="badge bg-danger">{{ item.estado }}</span>
+                            {% else %}
+                                <span class="badge bg-secondary">{{ item.estado }}</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if item.ultima_actividad %}
+                                {{ item.ultima_actividad|date:"Y-m-d H:i" }}
+                            {% else %}
+                                Sin registros
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" class="text-center text-muted">No hay datos operativos disponibles.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="table-container">
+            <h5 class="mb-3">Accesos rápidos</h5>
+            <div class="d-grid gap-2">
+                <a href="{% url 'archivocargaform' %}" class="btn" style="background-color: #ff6600; border-color: #ff6600; color: white;">Nueva carga masiva</a>
+                <a href="{% url 'calificacioneslista' %}" class="btn btn-outline-secondary">Buscar calificación</a>
+                <a href="{% url 'auditorialista' %}" class="btn btn-outline-secondary">Ver auditoría</a>
+                <a href="{% url 'factoreslista' %}" class="btn btn-outline-dark">Administrar factores</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

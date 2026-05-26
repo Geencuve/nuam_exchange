@@ -1,0 +1,70 @@
+{% extends "appNuam/base.html" %}
+
+{% block title %}Normativas | NUAM Exchange{% endblock %}
+{% block page_title %}Normativas Tributarias{% endblock %}
+
+{% block content %}
+<div class="table-container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="mb-0">Listado de normativas tributarias</h5>
+        <a href="{% url 'normativa_form' %}" class="btn" style="background-color: #ff6600; border-color: #ff6600; color: white;">
+            Nueva normativa
+        </a>
+    </div>
+
+    <table class="table table-striped align-middle">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>País</th>
+                <th>Normativa</th>
+                <th>Versión</th>
+                <th>Vigente desde</th>
+                <th>Vigente hasta</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for normativa in normativas %}
+            <tr>
+                <td>{{ normativa.id }}</td>
+                <td>{{ normativa.pais.nombre }}</td>
+                <td>{{ normativa.nombre_normativa }}</td>
+                <td>{{ normativa.version_normativa }}</td>
+                <td>{{ normativa.vigente_desde|date:"Y-m-d" }}</td>
+                <td><a href="{% url 'normativa_configurar' normativa.id %}">
+                        Configurar
+                    </a> 
+                </td>
+                <td>
+                    {% if normativa.vigente_hasta %}
+                        {{ normativa.vigente_hasta|date:"Y-m-d" }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+                <td>
+                    {% if normativa.estado == 'VIGENTE' %}
+                        <span class="badge bg-success">Vigente</span>
+                    {% elif normativa.estado == 'BORRADOR' %}
+                        <span class="badge bg-warning text-dark">Borrador</span>
+                    {% elif normativa.estado == 'INACTIVA' %}
+                        <span class="badge bg-secondary">Inactiva</span>
+                    {% else %}
+                        <span class="badge bg-light text-dark">{{ normativa.estado }}</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <button class="btn btn-sm btn-outline-danger">Eliminar</button>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="8" class="text-center text-muted">No hay normativas registradas.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

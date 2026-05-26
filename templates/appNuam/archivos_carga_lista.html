@@ -1,0 +1,68 @@
+{% extends "appNuam/base.html" %}
+
+{% block title %}Archivos de Carga | NUAM Exchange{% endblock %}
+{% block page_title %}Archivos de Carga{% endblock %}
+
+{% block content %}
+<div class="table-container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="mb-0">Listado de archivos de carga</h5>
+        <a href="{% url 'archivo_carga_form' %}" class="btn" style="background-color: #ff6600; border-color: #ff6600; color: white;">
+            Nueva carga
+        </a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped align-middle">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Archivo</th>
+                    <th>País</th>
+                    <th>Usuario</th>
+                    <th>Total registros</th>
+                    <th>Correctos</th>
+                    <th>Error</th>
+                    <th>Estado</th>
+                    <th>Fecha carga</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for archivo in archivos %}
+                <tr>
+                    <td>{{ archivo.id }}</td>
+                    <td>{{ archivo.nombre_archivo }}</td>
+                    <td>{{ archivo.pais.nombre }}</td>
+                    <td>{{ archivo.usuario.username }}</td>
+                    <td>{{ archivo.total_registros }}</td>
+                    <td>{{ archivo.registros_ok }}</td>
+                    <td>{{ archivo.registros_error }}</td>
+                    <td>
+                        {% if archivo.estado_proceso == 'PROCESADO' %}
+                            <span class="badge bg-success">Procesado</span>
+                        {% elif archivo.estado_proceso == 'PROCESADO_CON_ERRORES' or archivo.estado_proceso == 'PROCESADOCONERRORES' %}
+                            <span class="badge bg-warning text-dark">Procesado con errores</span>
+                        {% elif archivo.estado_proceso == 'PENDIENTE' %}
+                            <span class="badge bg-secondary">Pendiente</span>
+                        {% elif archivo.estado_proceso == 'PROCESANDO' %}
+                            <span class="badge bg-info text-dark">Procesando</span>
+                        {% elif archivo.estado_proceso == 'RECHAZADO' %}
+                            <span class="badge bg-danger">Rechazado</span>
+                        {% else %}
+                            <span class="badge bg-light text-dark">{{ archivo.estado_proceso }}</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ archivo.fecha_carga|date:"Y-m-d H:i" }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="9" class="text-center text-muted">
+                        No hay archivos de carga registrados.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

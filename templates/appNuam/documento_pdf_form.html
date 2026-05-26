@@ -1,0 +1,67 @@
+{% extends 'appNuam/base.html' %}
+
+{% block title %}Carga de PDF{% endblock %}
+{% block pagetitle %}Carga de PDF{% endblock %}
+
+{% block content %}
+<div class="table-container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h5 class="mb-1">Registrar documento PDF</h5>
+            <p class="text-muted mb-0">Suba un archivo PDF para extraer información tributaria.</p>
+        </div>
+        <a href="{% url 'documentos_lista' %}" class="btn btn-outline-secondary">Volver</a>
+    </div>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label for="{{ form.usuario.id_for_label }}" class="form-label">Usuario</label>
+                {{ form.usuario }}
+                {% if form.usuario.errors %}
+                    <div class="text-danger small mt-1">{{ form.usuario.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="col-md-6">
+                <label for="{{ form.pais.id_for_label }}" class="form-label">País</label>
+                {{ form.pais }}
+                {% if form.pais.errors %}
+                    <div class="text-danger small mt-1">{{ form.pais.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="col-md-12">
+                <label for="{{ form.archivo.id_for_label }}" class="form-label">Archivo PDF</label>
+                {{ form.archivo }}
+                {% if form.archivo.errors %}
+                    <div class="text-danger small mt-1">{{ form.archivo.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="col-md-12">
+                <label for="{{ form.observacion.id_for_label }}" class="form-label">Observación</label>
+                {{ form.observacion }}
+                {% if form.observacion.errors %}
+                    <div class="text-danger small mt-1">{{ form.observacion.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="mt-4 d-flex gap-2">
+            <button type="submit" class="btn" style="background-color:#ff6600;border-color:#ff6600;color:white;">
+                Guardar PDF
+            </button>
+            <a href="{% url 'documentos_lista' %}" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

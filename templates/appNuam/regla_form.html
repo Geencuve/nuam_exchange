@@ -1,0 +1,118 @@
+{% extends "appNuam/base.html" %}
+
+{% block title %}Formulario Reglas | NUAM Exchange{% endblock %}
+{% block page_title %}Formulario de Reglas{% endblock %}
+
+{% block content %}
+<div class="table-container">
+    <h5 class="mb-3">Registrar / Editar regla</h5>
+
+    {% if normativa %}
+        <div class="alert alert-light border">
+            <strong>Normativa:</strong> {{ normativa.nombre_normativa }} |
+            <strong>País:</strong> {{ normativa.pais.nombre }} |
+            <strong>Versión:</strong> {{ normativa.version_normativa }}
+        </div>
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+
+        {% if normativa %}
+            <input type="hidden" name="normativa_id" value="{{ normativa.id }}">
+        {% endif %}
+
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label">País</label>
+                {{ form.pais }}
+                {% if form.pais.errors %}
+                    <div class="text-danger small">{{ form.pais.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Normativa</label>
+                {{ form.normativa }}
+                {% if form.normativa.errors %}
+                    <div class="text-danger small">{{ form.normativa.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Nombre regla</label>
+                {{ form.nombre_regla }}
+                {% if form.nombre_regla.errors %}
+                    <div class="text-danger small">{{ form.nombre_regla.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Prioridad</label>
+                {{ form.prioridad }}
+                {% if form.prioridad.errors %}
+                    <div class="text-danger small">{{ form.prioridad.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="col-md-12">
+                <label class="form-label">Descripción</label>
+                {{ form.descripcion }}
+                {% if form.descripcion.errors %}
+                    <div class="text-danger small">{{ form.descripcion.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="col-md-12">
+                <label class="form-label">Condición aplicable</label>
+                {{ form.condicion_aplicable }}
+                {% if form.condicion_aplicable.errors %}
+                    <div class="text-danger small">{{ form.condicion_aplicable.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="col-md-12">
+                <label class="form-label">Fórmula aplicable</label>
+                {{ form.formula_aplicable }}
+                {% if form.formula_aplicable.errors %}
+                    <div class="text-danger small">{{ form.formula_aplicable.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Activa</label>
+                {{ form.activa }}
+                {% if form.activa.errors %}
+                    <div class="text-danger small">{{ form.activa.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Creado por</label>
+                {{ form.creado_por }}
+                {% if form.creado_por.errors %}
+                    <div class="text-danger small">{{ form.creado_por.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <button type="submit" class="btn" style="background-color: #ff6600; border-color: #ff6600; color: white;">
+                Guardar
+            </button>
+
+            {% if normativa %}
+                <a href="{% url 'normativa_configurar' normativa.id %}" class="btn btn-secondary">Cancelar</a>
+            {% else %}
+                <a href="{% url 'reglas_lista' %}" class="btn btn-secondary">Cancelar</a>
+            {% endif %}
+        </div>
+    </form>
+</div>
+{% endblock %}
